@@ -729,5 +729,150 @@ async function sendMsg(){
   }
 })();
 </script>
+<script>
+var chatHistory = [];
+
+var SYSTEM = 'You are Elymas AI, a warm, friendly and spiritually grounded assistant for Kyeremeh Abass — a Ghanaian Christian and inspirational author. Help visitors with: His 3 books: "Saved by Grace" GH₵30, "When Purpose Meets Excellence" GH₵40, "The Light Within" GH₵30. Bible questions and verses. Spiritual encouragement. How to order books via MoMo — Manager WhatsApp: +233 536 782 743 or Assistant: +233 534 157 964. Keep replies short (2-3 sentences). Be warm and Christ-centred.';
+
+function addMsg(cls, text) {
+  var box = document.getElementById('chMs');
+  var d = document.createElement('div');
+  d.className = 'msg ' + cls;
+  d.textContent = text;
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+  return d;
+}
+
+async function sendMsg() {
+  var inp = document.getElementById('chIn');
+  var btn = document.getElementById('chSn');
+  var txt = inp.value.trim();
+  if (!txt) return;
+
+  inp.value = '';
+  inp.disabled = true;
+  btn.disabled = true;
+
+  addMsg('mUs', txt);
+  chatHistory.push({ role: 'user', content: txt });
+
+  var tm = addMsg('mTy', '✦ Elymas AI is thinking…');
+
+  // First try the API
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': '',
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 300,
+        system: SYSTEM,
+        messages: chatHistory
+      })
+    });
+
+    tm.remove();
+
+    if (res.ok) {
+      var data = await res.json();
+      var reply = (data.content && data.content[0] && data.content[0].text)
+        ? data.content[0].text
+        : getLocalReply(txt);
+      chatHistory.push({ role: 'assistant', content: reply });
+      addMsg('mAI', reply);
+    } else {
+      fallback(tm, txt);
+    }
+  } catch (e) {
+    fallback(tm, txt);
+  }
+
+  inp.disabled = false;
+  btn.disabled = false;
+  inp.focus();
+}
+
+function fallback(tm, txt) {
+  if (tm && tm.parentNode) tm.remove();
+  var reply = getLocalReply(txt);
+  chatHistory.push({ role: 'assistant', content: reply });
+  addMsg('mAI', reply);
+}
+
+function getLocalReply(txt) {
+  var t = txt.toLowerCase();
+
+  if (/^(hi|hello|hey|good morning|good afternoon|good evening|peace|greet)/.test(t))
+    return '✝ Peace be with you! I am Elymas AI. Ask me about our books, Bible verses, faith, or how to place an order. How can I help? 🙏';
+
+  if (/price|cost|how much|ghc|cedi/.test(t))
+    return '📚 "Saved by Grace" — GH₵30 | "When Purpose Meets Excellence" — GH₵40 | "The Light Within" — GH₵30. Message us on WhatsApp to order!';
+
+  if (/order|buy|purchase|momo|payment|pay/.test(t))
+    return '💬 To order, message our Manager on WhatsApp: +233 536 782 743. We accept MTN MoMo, Telecel Cash and AirtelTigo Money. God bless you! 🙏';
+
+  if (/saved by grace/.test(t))
+    return '✝ "Saved by Grace" (GH₵30) — based on Ephesians 2:8. A powerful book about salvation and God\'s transforming grace in every believer\'s life.';
+
+  if (/purpose|excellence/.test(t))
+    return '🌟 "When Purpose Meets Excellence" (GH₵40) — teaches how discovering your God-given purpose and pursuing excellence can completely transform your life!';
+
+  if (/light within/.test(t))
+    return '✨ "The Light Within" (GH₵30) — letting Christ shine in every room of your life. It reveals the light God placed in every believer to shine in the world.';
+
+  if (/book/.test(t))
+    return '📚 We have 3 books: "Saved by Grace" GH₵30, "When Purpose Meets Excellence" GH₵40, "The Light Within" GH₵30. Which one interests you?';
+
+  if (/john 3:16|god so loved/.test(t))
+    return '✝ John 3:16 — "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life." Amen! 🙏';
+
+  if (/jeremiah 29|plans i have/.test(t))
+    return '✝ Jeremiah 29:11 — "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future." 🙏';
+
+  if (/philippians 4:13|do all things|strengthen/.test(t))
+    return '✝ Philippians 4:13 — "I can do all things through Christ who strengthens me." Hold on to this promise every day! 💪';
+
+  if (/psalm 23|shepherd/.test(t))
+    return '✝ Psalm 23:1 — "The Lord is my shepherd; I shall not want." What a beautiful assurance of God\'s care and provision! 🙏';
+
+  if (/proverbs 3|trust in the lord/.test(t))
+    return '✝ Proverbs 3:5-6 — "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight." 🙏';
+
+  if (/joshua 1:9|strong and courageous/.test(t))
+    return '✝ Joshua 1:9 — "Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go." 🙏';
+
+  if (/verse|scripture|bible passage/.test(t))
+    return '📖 "Trust in the Lord with all your heart and lean not on your own understanding." — Proverbs 3:5. Would you like a specific verse? Just ask! 🙏';
+
+  if (/prayer|pray/.test(t))
+    return '🙏 Philippians 4:6 — "Do not be anxious about anything, but in everything, by prayer and petition, present your requests to God." He always hears you!';
+
+  if (/faith|believe|trust/.test(t))
+    return '✝ Hebrews 11:1 — "Now faith is confidence in what we hope for and assurance about what we do not see." Keep trusting God — He is always faithful! 🙏';
+
+  if (/kyeremeh|author|abass/.test(t))
+    return '✍️ Kyeremeh Abass is a Ghanaian Christian and inspirational author whose books focus on faith, purpose and personal growth. His works have blessed many lives!';
+
+  if (/whatsapp|contact|phone|number/.test(t))
+    return '💬 Manager: +233 536 782 743 | Assistant: +233 534 157 964. Both available on WhatsApp. We would love to hear from you! 🙏';
+
+  if (/thank|thanks|bless/.test(t))
+    return '🙏 You are most welcome! May God bless you richly and keep you in His perfect peace. Is there anything else I can help with?';
+
+  if (/sad|difficult|hard|struggle|problem|worried|anxious/.test(t))
+    return '🙏 "I can do all things through Christ who strengthens me." — Philippians 4:13. Whatever you are going through, God is with you. You are not alone! ✝';
+
+  if (/god|jesus|christ|lord|holy spirit|spirit/.test(t))
+    return '✝ "For God so loved the world that he gave his one and only Son." — John 3:16. God loves you deeply and has a wonderful purpose for your life! 🙏';
+
+  return '🙏 Thank you for your message! I can help with book orders, Bible verses, or faith questions. What would you like to know? God bless you! ✝';
+}
+</script>
 </body>
 </html>
