@@ -538,27 +538,35 @@ footer a{color:var(--G3);text-decoration:none}
 </section>
 
 <section class="aiSec" id="ai">
-  <div class="wrap">
-    <div class="shead">
-      <div class="chip">✦ AI Assistant</div>
-      <h2 class="sh2">Chat with Elymas AI</h2>
-      <div class="sbar"></div>
-      <p class="ssub">Ask about books, Bible passages, faith, or how to place an order</p>
+  <div class="chat-section" id="ai">
+  <div class="chat-heading">
+    <div class="chip">✦ AI Assistant</div>
+    <h2>Chat with Elymas AI</h2>
+    <div class="sbar"></div>
+    <p>Ask about books, Bible passages, faith, or how to place an order</p>
+  </div>
+
+  <div class="chatBox">
+    <div class="chHdr">
+      <div class="chDot"></div>
+      <div>
+        <div class="chNm">Elymas AI ✦</div>
+        <div class="chSb">Spiritual companion · Always ready to help</div>
+      </div>
     </div>
-    <div class="chatBox rv">
-      <div class="chHdr">
-        <div class="chDot"></div>
-        <div><div class="chNm">Elymas AI ✦</div><div class="chSb">Powered by Claude · Always online</div></div>
-      </div>
-      <div class="chMs" id="chMs">
-        <div class="msg mAI">✝ Peace be with you! I'm Elymas AI — your spiritual companion. Ask me about the books, Bible verses, faith, or how to order. 🙏</div>
-      </div>
-      <div class="chIR">
-        <input class="chIn" id="chIn" type="text" placeholder="Ask about faith, books, Bible…" onkeydown="if(event.key==='Enter')sendMsg()"/>
-        <button class="chSn" onclick="sendMsg()">➤</button>
-      </div>
+
+    <div class="chMs" id="chMs">
+      <div class="msg mAI">✝ Peace be with you! I am Elymas AI — your spiritual companion. Ask me about Kyeremeh's books, Bible verses, questions of faith, or how to order. I am here for you! 🙏</div>
+    </div>
+
+    <div class="chIR">
+      <input class="chIn" id="chIn" type="text"
+        placeholder="Ask about faith, books, Bible passages…"
+        onkeydown="if(event.key==='Enter')sendMsg()"/>
+      <button class="chSn" id="chSn" onclick="sendMsg()">➤</button>
     </div>
   </div>
+</div>
 </section>
 
 <section class="contactSec" id="contact">
