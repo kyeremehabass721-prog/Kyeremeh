@@ -169,157 +169,30 @@ section{padding:5.5rem 1.5rem}
 .qFb{font-size:.88rem;font-weight:700;min-height:1.3em;margin-bottom:1rem}
 
 /* AI */
+.aiSec{padding:6rem 1.5rem;background:radial-gradient(ellipse 65% 60% at 30% 40%,rgba(75,0,130,.94),transparent),radial-gradient(ellipse 55% 55% at 78% 72%,rgba(123,47,190,.8),transparent),linear-gradient(180deg,#060012,#1A0044)}
+.aiSec .sh2{color:#fff}
+.aiSec .ssub{color:rgba(255,255,255,.55)}
+.chatBox{max-width:720px;margin:0 auto;background:rgba(255,255,255,.05);border:1px solid rgba(201,162,39,.32);border-radius:14px;overflow:hidden;backdrop-filter:blur(16px);box-shadow:0 20px 80px rgba(0,0,0,.5)}
+.chHdr{background:linear-gradient(135deg,rgba(75,0,130,.52),rgba(123,47,190,.36));padding:1rem 1.5rem;display:flex;align-items:center;gap:.9rem;border-bottom:1px solid rgba(201,162,39,.2)}
+.chDot{width:12px;height:12px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle,var(--G3),var(--G2));box-shadow:0 0 12px rgba(201,162,39,.9);animation:dp 2s ease-in-out infinite}
+@keyframes dp{0%,100%{box-shadow:0 0 8px rgba(201,162,39,.6)}50%{box-shadow:0 0 22px rgba(201,162,39,1)}}
+.chNm{font-family:'Cinzel',serif;font-size:.95rem;color:var(--G3);font-weight:700}
+.chSb{font-size:.68rem;color:rgba(255,255,255,.4);margin-top:1px}
+.chMs{height:320px;overflow-y:auto;padding:1.4rem;display:flex;flex-direction:column;gap:1rem}
+.chMs::-webkit-scrollbar{width:4px}
+.chMs::-webkit-scrollbar-thumb{background:rgba(201,162,39,.28);border-radius:2px}
+.msg{max-width:86%;padding:.85rem 1.1rem;border-radius:14px;font-size:.88rem;line-height:1.7}
+.mAI{align-self:flex-start;background:rgba(255,255,255,.09);color:rgba(255,255,255,.9);border:1px solid rgba(201,162,39,.18);border-bottom-left-radius:3px}
+.mUs{align-self:flex-end;background:linear-gradient(135deg,var(--G1),var(--G2),var(--G3));color:var(--P1);font-weight:700;border-bottom-right-radius:3px}
+.mTy{align-self:flex-start;background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);border-bottom-left-radius:3px;font-style:italic;font-size:.83rem}
+.chIR{display:flex;border-top:1px solid rgba(201,162,39,.18)}
+.chIn{flex:1;padding:1rem 1.3rem;background:rgba(255,255,255,.04);border:none;color:#fff;font-family:'Nunito',sans-serif;font-size:.88rem;outline:none}
+.chIn::placeholder{color:rgba(255,255,255,.28)}
+.chSn{padding:1rem 1.6rem;background:linear-gradient(135deg,var(--G1),var(--G2),var(--G3));color:var(--P1);border:none;cursor:pointer;font-size:1.15rem;font-weight:900;transition:opacity .2s}
+.chSn:hover{opacity:.88}
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Nunito', sans-serif; background: #0B0020; display: flex; justify-content: center; padding: 2rem 1rem; min-height: 100vh; }
 
-.chat-section {
-  width: 100%;
-  max-width: 720px;
-}
 
-.chat-heading {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-.chat-heading .chip {
-  display: inline-block;
-  background: linear-gradient(135deg, #4B0082, #7B2FBE);
-  color: #fff;
-  font-size: .63rem;
-  font-weight: 700;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  padding: .34rem 1rem;
-  border-radius: 2px;
-  margin-bottom: .9rem;
-}
-.chat-heading h2 {
-  font-family: Georgia, serif;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #E8C040;
-  line-height: 1.15;
-}
-.chat-heading .sbar {
-  width: 60px;
-  height: 3px;
-  margin: .9rem auto 0;
-  border-radius: 2px;
-  background: linear-gradient(90deg, #4B0082, #C9A227, #E8C040);
-  box-shadow: 0 0 12px rgba(201,162,39,.45);
-}
-.chat-heading p {
-  margin-top: 1rem;
-  color: rgba(255,255,255,.55);
-  font-size: .93rem;
-  font-weight: 300;
-}
-
-/* CHAT BOX */
-.chatBox {
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(201,162,39,.32);
-  border-radius: 14px;
-  overflow: hidden;
-  backdrop-filter: blur(16px);
-  box-shadow: 0 20px 80px rgba(0,0,0,.5);
-}
-
-.chHdr {
-  background: linear-gradient(135deg, rgba(75,0,130,.52), rgba(123,47,190,.36));
-  padding: 1rem 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: .9rem;
-  border-bottom: 1px solid rgba(201,162,39,.2);
-}
-.chDot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  background: radial-gradient(circle, #E8C040, #C9A227);
-  box-shadow: 0 0 12px rgba(201,162,39,.9);
-  animation: dp 2s ease-in-out infinite;
-}
-@keyframes dp {
-  0%,100% { box-shadow: 0 0 8px rgba(201,162,39,.6); }
-  50%      { box-shadow: 0 0 22px rgba(201,162,39,1); }
-}
-.chNm { font-family: Georgia, serif; font-size: .95rem; color: #E8C040; font-weight: 700; }
-.chSb { font-size: .7rem; color: rgba(255,255,255,.4); margin-top: 1px; }
-
-.chMs {
-  height: 380px;
-  overflow-y: auto;
-  padding: 1.4rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.chMs::-webkit-scrollbar { width: 4px; }
-.chMs::-webkit-scrollbar-thumb { background: rgba(201,162,39,.3); border-radius: 2px; }
-
-.msg {
-  max-width: 86%;
-  padding: .85rem 1.1rem;
-  border-radius: 14px;
-  font-size: .9rem;
-  line-height: 1.7;
-  font-family: 'Nunito', sans-serif;
-}
-.mAI {
-  align-self: flex-start;
-  background: rgba(255,255,255,.09);
-  color: rgba(255,255,255,.9);
-  border: 1px solid rgba(201,162,39,.18);
-  border-bottom-left-radius: 3px;
-}
-.mUs {
-  align-self: flex-end;
-  background: linear-gradient(135deg, #8B6914, #C9A227, #E8C040);
-  color: #14003A;
-  font-weight: 700;
-  border-bottom-right-radius: 3px;
-}
-.mTy {
-  align-self: flex-start;
-  background: rgba(255,255,255,.06);
-  color: rgba(255,255,255,.4);
-  border-bottom-left-radius: 3px;
-  font-style: italic;
-  font-size: .84rem;
-}
-
-.chIR {
-  display: flex;
-  border-top: 1px solid rgba(201,162,39,.18);
-}
-.chIn {
-  flex: 1;
-  padding: 1rem 1.3rem;
-  background: rgba(255,255,255,.04);
-  border: none;
-  color: #fff;
-  font-family: 'Nunito', sans-serif;
-  font-size: .9rem;
-  outline: none;
-}
-.chIn::placeholder { color: rgba(255,255,255,.28); }
-.chSn {
-  padding: 1rem 1.8rem;
-  background: linear-gradient(135deg, #8B6914, #C9A227, #E8C040);
-  color: #14003A;
-  border: none;
-  cursor: pointer;
-  font-size: 1.2rem;
-  font-weight: 900;
-  transition: opacity .2s;
-}
-.chSn:hover { opacity: .88; }
-.chSn:disabled { opacity: .5; cursor: not-allowed; }
-  
 /* CONTACT */
 .contactSec{background:var(--BG2)}
 .ctGrid{max-width:580px;margin:0 auto 2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
