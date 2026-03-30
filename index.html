@@ -239,6 +239,80 @@ footer a{color:var(--G3);text-decoration:none}
   section{padding:4rem 1rem}
   .chMs{height:240px}
 }
+  
+/* ── TRANSLATION TABS ── */
+.transWrap{margin-top:1.4rem;display:none}
+.transLabel{
+  font-family:'Cinzel',serif;font-size:.7rem;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;color:#C9A227;
+  margin-bottom:.9rem;display:flex;align-items:center;gap:.6rem;
+}
+.transLabel::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(201,162,39,.4),transparent)}
+.transTabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.tTab{
+  padding:.45rem 1rem;border:1.5px solid rgba(123,47,190,.2);
+  border-radius:20px;background:#FFF9F0;color:#4A1A80;
+  font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;
+  cursor:pointer;transition:all .2s;letter-spacing:.05em;
+}
+[data-theme="dark"] .tTab{background:#1A0040;color:#C49BE8}
+.tTab:hover{border-color:#C9A227;color:#C9A227}
+.tTab.tActive{
+  background:linear-gradient(135deg,#4B0082,#7B2FBE);
+  color:#fff;border-color:transparent;
+  box-shadow:0 3px 12px rgba(75,0,130,.35);
+}
+.tTab.tActive.eng{background:linear-gradient(135deg,#8B6914,#C9A227);color:#14003A}
+.transOut{
+  background:#FFFFFF;border:1.5px solid rgba(123,47,190,.2);
+  border-radius:10px;padding:1.8rem;min-height:100px;
+  line-height:2;color:#4A1A80;
+  box-shadow:0 4px 20px rgba(75,0,130,.1);
+  display:none;
+}
+[data-theme="dark"] .transOut{background:#1A0040;color:#C49BE8}
+.transOut.tShow{display:block}
+.transOut.rtl{direction:rtl;text-align:right;font-size:1.15rem;line-height:2.4;letter-spacing:.04em}
+.transOut.italic{font-style:italic}
+.transNote{
+  font-size:.72rem;color:#8860B0;margin-top:.9rem;
+  padding-top:.8rem;border-top:1px solid rgba(123,47,190,.15);
+  font-style:italic;
+}
+[data-theme="dark"] .transNote{color:#8060A8}
+.transLoading{color:#8860B0;font-style:italic;font-size:.9rem}
+.vn{font-size:.56rem;font-weight:800;color:#C9A227;vertical-align:super;margin-right:3px;font-family:'Nunito',sans-serif}
+
+/* ── DAILY VERSE TRANSLATIONS ── */
+.dvTrans{margin-top:2.5rem;position:relative;z-index:2}
+.dvTransTitle{
+  font-size:.67rem;letter-spacing:.35em;text-transform:uppercase;
+  color:#E8C040;font-weight:700;margin-bottom:1.2rem;text-align:center;
+}
+.dvLangGrid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1rem;max-width:900px;margin:0 auto;
+}
+.dvLangCard{
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(201,162,39,.25);
+  border-radius:10px;padding:1.2rem 1.4rem;
+}
+.dvLangName{
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:#E8C040;font-weight:700;margin-bottom:.6rem;
+  display:flex;align-items:center;gap:.4rem;
+}
+.dvLangText{
+  color:rgba(255,255,255,.88);line-height:1.85;font-size:.92rem;
+  font-family:'EB Garamond',serif;font-style:italic;
+}
+.dvLangText.rtl{direction:rtl;text-align:right;font-size:1.05rem;line-height:2.1}
+.dvLangRef{
+  font-size:.72rem;color:#C9A227;font-weight:700;
+  margin-top:.5rem;font-style:normal;font-family:'Nunito',sans-serif;
+}
+
 </style>
 </head>
 <body>
