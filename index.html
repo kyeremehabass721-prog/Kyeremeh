@@ -904,5 +904,222 @@ function getLocalReply(txt) {
   return '🙏 Thank you for your message! I can help with book orders, Bible verses, or faith questions. What would you like to know? God bless you! ✝';
 }
 </script>
+<script>
+  var DAILY_VERSES = [
+  {
+    eng: '"For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future."',
+    ref: '— Jeremiah 29:11',
+    heb: 'כִּי אָנֹכִי יָדַעְתִּי אֶת-הַמַּחֲשָׁבֹת אֲשֶׁר אָנֹכִי חֹשֵׁב עֲלֵיכֶם נְאֻם-יְהוָה מַחְשְׁבֹות שָׁלֹום וְלֹא לְרָעָה לָתֵת לָכֶם אַחֲרִית וְתִקְוָה',
+    heb_ref: 'יִרְמְיָהוּ כט:יא',
+    grk: 'ἐγὼ γὰρ οἶδα τοὺς λογισμούς, οὓς ἐγὼ λογίζομαι ἐφ᾽ ὑμᾶς, λέγει Κύριος, λογισμοὶ εἰρήνης καὶ οὐ κακῶν, τοῦ δοῦναι ὑμῖν ἐλπίδα καὶ ὑπομονήν.',
+    grk_ref: 'Ἱερεμίας 29:11',
+    ara: 'ܡܛܠ ܕܐܢܐ ܝܕܥ ܐܢܐ ܡܚܫܒܬܐ ܕܡܬܚܫܒ ܐܢܐ ܥܠܝܟܘܢ ܐܡܪ ܡܪܝܐ ܡܚܫܒܬܐ ܕܫܠܡܐ ܘܠܐ ܕܒܝܫܬܐ',
+    ara_ref: 'ܐܪܡܝܐ ܟܛ:ܝܐ',
+    lat: 'Ego enim scio cogitationes quas ego cogito super vos, ait Dominus, cogitationes pacis et non afflictionis, ut dem vobis finem et patientiam.',
+    lat_ref: 'Hieremias 29:11'
+  },
+  {
+    eng: '"I can do all things through Christ who strengthens me."',
+    ref: '— Philippians 4:13',
+    heb: 'הַכֹּל אֲנִי יָכֹול בְּמָשִׁיחַ הַמְחַזְּקֵנִי',
+    heb_ref: 'פִּילִיפִּים ד:יג',
+    grk: 'πάντα ἰσχύω ἐν τῷ ἐνδυναμοῦντί με Χριστῷ.',
+    grk_ref: 'Φιλιππησίους 4:13',
+    ara: 'ܟܠ ܡܕܡ ܡܨܐ ܐܢܐ ܒܡܫܝܚܐ ܗܘ ܕܡܚܝܠ ܠܝ',
+    ara_ref: 'ܦܝܠܝܦܣܝܘܣ ܕ:ܝܓ',
+    lat: 'Omnia possum in eo qui me confortat.',
+    lat_ref: 'Philippenses 4:13'
+  },
+  {
+    eng: '"The Lord is my shepherd; I shall not want."',
+    ref: '— Psalm 23:1',
+    heb: 'יְהוָה רֹעִי לֹא אֶחְסָר',
+    heb_ref: 'תְּהִלִּים כג:א',
+    grk: 'Κύριος ποιμαίνει με, καὶ οὐδέν με ὑστερήσει.',
+    grk_ref: 'Ψαλμός 23:1',
+    ara: 'ܡܪܝܐ ܪܥܐ ܠܝ ܘܡܕܡ ܠܐ ܡܚܣܪ ܠܝ',
+    ara_ref: 'ܡܙܡܘܪܐ ܟܓ:ܐ',
+    lat: 'Dominus regit me, et nihil mihi deerit.',
+    lat_ref: 'Psalmus 22:1'
+  },
+  {
+    eng: '"Trust in the Lord with all your heart and lean not on your own understanding."',
+    ref: '— Proverbs 3:5',
+    heb: 'בְּטַח אֶל-יְהוָה בְּכָל-לִבֶּךָ וְאֶל-בִּינָתְךָ אַל-תִּשָּׁעֵן',
+    heb_ref: 'מִשְׁלֵי ג:ה',
+    grk: 'πεποιθὼς ἴσθι ἐν ὅλῃ καρδίᾳ σου ἐπὶ τῷ Θεῷ, ἐπὶ δὲ σῇ σοφίᾳ μὴ ἐπαίρου.',
+    grk_ref: 'Παροιμίαι 3:5',
+    ara: 'ܬܟܠ ܥܠ ܡܪܝܐ ܒܟܠܗ ܠܒܟ ܘܥܠ ܒܝܢܬܟ ܠܐ ܬܣܬܡܟ',
+    ara_ref: 'ܡܬܠܐ ܓ:ܗ',
+    lat: 'Habe fiduciam in Domino ex toto corde tuo, et ne innitaris prudentiae tuae.',
+    lat_ref: 'Proverbia 3:5'
+  },
+  {
+    eng: '"Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go."',
+    ref: '— Joshua 1:9',
+    heb: 'חֲזַק וֶאֱמָץ אַל-תַּעֲרֹץ וְאַל-תֵּחָת כִּי עִמְּךָ יְהוָה אֱלֹהֶיךָ בְּכֹל אֲשֶׁר תֵּלֵךְ',
+    heb_ref: 'יְהוֹשֻׁעַ א:ט',
+    grk: 'ἰσχύε καὶ ἀνδρίζου, μὴ δειλιάσῃς μηδὲ φοβηθῇς, ὅτι μετὰ σοῦ Κύριος ὁ Θεός σου εἰς πάντα, οὗ ἐὰν πορεύῃ.',
+    grk_ref: 'Ἰησοῦς Ναυῆ 1:9',
+    ara: 'ܐܬܚܝܠ ܘܐܬܐܡܨ ܠܐ ܬܕܚܠ ܘܠܐ ܬܬܬܒܪ ܡܛܠ ܕܥܡܟ ܡܪܝܐ ܐܠܗܟ ܒܟܠ ܕܬܐܙܠ',
+    ara_ref: 'ܝܫܘܥ ܐ:ܛ',
+    lat: 'Confortare et esto robustus; noli metuere et noli timere, quoniam tecum est Dominus Deus tuus in omnibus ad quaecumque perrexeris.',
+    lat_ref: 'Iosue 1:9'
+  },
+  {
+    eng: '"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."',
+    ref: '— John 3:16',
+    heb: 'כִּי-כֵן אָהַב אֱלֹהִים אֶת-הָעוֹלָם עַד כִּי נָתַן אֶת-בְּנוֹ אֶת-יְחִידוֹ לְמַעַן לֹא-יֹאבַד כָּל-הַמַּאֲמִין בּוֹ',
+    heb_ref: 'יוֹחָנָן ג:טז',
+    grk: 'οὕτω γὰρ ἠγάπησεν ὁ Θεὸς τὸν κόσμον, ὥστε τὸν υἱὸν αὐτοῦ τὸν μονογενῆ ἔδωκεν, ἵνα πᾶς ὁ πιστεύων εἰς αὐτὸν μὴ ἀπόληται ἀλλ᾽ ἔχῃ ζωὴν αἰώνιον.',
+    grk_ref: 'Κατὰ Ἰωάννην 3:16',
+    ara: 'ܗܟܢܐ ܓܝܪ ܐܚܒ ܐܠܗܐ ܠܥܠܡܐ ܐܝܟܢܐ ܕܠܒܪܗ ܝܚܝܕܝܐ ܢܬܠ ܕܟܠ ܡܢ ܕܡܗܝܡܢ ܒܗ ܠܐ ܢܐܒܕ',
+    ara_ref: 'ܝܘܚܢܢ ܓ:ܝܘ',
+    lat: 'Sic enim dilexit Deus mundum ut Filium suum unigenitum daret ut omnis qui credit in eum non pereat sed habeat vitam aeternam.',
+    lat_ref: 'Ioannes 3:16'
+  },
+  {
+    eng: '"The Lord is my light and my salvation — whom shall I fear?"',
+    ref: '— Psalm 27:1',
+    heb: 'יְהוָה אוֹרִי וְיִשְׁעִי מִמִּי אִירָא יְהוָה מָעוֹז-חַיַּי מִמִּי אֶפְחָד',
+    heb_ref: 'תְּהִלִּים כז:א',
+    grk: 'Κύριος φωτισμός μου καὶ σωτήρ μου, τίνα φοβηθήσομαι; Κύριος ὑπερασπιστὴς τῆς ζωῆς μου, ἀπὸ τίνος δειλιάσω;',
+    grk_ref: 'Ψαλμός 27:1',
+    ara: 'ܡܪܝܐ ܢܘܗܪܝ ܘܦܪܘܩܝ ܡܢ ܕܚܠ ܡܪܝܐ ܥܘܫܢ ܚܝܝ ܡܢ ܐܬܬܙܝܥ',
+    ara_ref: 'ܡܙܡܘܪܐ ܟܙ:ܐ',
+    lat: 'Dominus illuminatio mea et salus mea, quem timebo? Dominus protector vitae meae, a quo trepidabo?',
+    lat_ref: 'Psalmus 26:1'
+  }
+];
+
+/* Set today's verse with ALL translations */
+(function(){
+  var dv = DAILY_VERSES[new Date().getDay() % DAILY_VERSES.length];
+  document.getElementById('vT').textContent = dv.eng;
+  document.getElementById('vR').textContent = dv.ref;
+  document.getElementById('dv-heb').textContent = dv.heb;
+  document.getElementById('dv-heb-ref').textContent = dv.heb_ref;
+  document.getElementById('dv-grk').textContent = dv.grk;
+  document.getElementById('dv-grk-ref').textContent = dv.grk_ref;
+  document.getElementById('dv-ara').textContent = dv.ara;
+  document.getElementById('dv-ara-ref').textContent = dv.ara_ref;
+  document.getElementById('dv-lat').textContent = dv.lat;
+  document.getElementById('dv-lat-ref').textContent = dv.lat_ref;
+})();
+
+
+/* ════════════════════════════════════
+   BIBLE READER — TRANSLATION TABS
+════════════════════════════════════ */
+var currentBook = 'GEN';
+var currentChapter = 1;
+var NT_BOOKS = ['MAT','MRK','LUK','JHN','ACT','ROM','1CO','2CO','GAL','EPH',
+                'PHP','COL','1TH','2TH','1TI','2TI','TIT','PHM','HEB','JAS',
+                '1PE','2PE','1JN','2JN','3JN','JUD','REV'];
+
+function loadBible(){
+  currentBook = document.getElementById('bk').value;
+  currentChapter = document.getElementById('ch').value || 1;
+  var out = document.getElementById('bOut');
+  out.innerHTML = '<span class="bh">✦ Loading…</span>';
+
+  /* Reset translation tabs */
+  document.getElementById('transWrap').style.display = 'none';
+  ['eng','heb','grk','ara','lat'].forEach(function(l){
+    var el = document.getElementById('tOut-'+l);
+    el.innerHTML = '';
+    el.classList.remove('tShow');
+  });
+  document.querySelectorAll('.tTab').forEach(function(t){t.classList.remove('tActive');});
+  document.querySelector('.tTab.eng').classList.add('tActive');
+  document.getElementById('tOut-eng').classList.add('tShow');
+
+  fetch('https://bible-api.com/'+currentBook+'+'+currentChapter)
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.error){ out.innerHTML='<span class="bh">Chapter not found. Try a lower number.</span>'; return; }
+      var txt = d.verses.map(function(v){
+        return '<sup class="vn">'+v.verse+'</sup>'+v.text+' ';
+      }).join('');
+      out.innerHTML = txt;
+      /* Fill English tab */
+      document.getElementById('tOut-eng').innerHTML =
+        txt + '<div class="transNote">📖 World English Bible — Modern English translation</div>';
+      document.getElementById('transWrap').style.display = 'block';
+    })
+    .catch(function(){ out.innerHTML='<span class="bh">Could not load. Check your connection.</span>'; });
+}
+
+function showTrans(lang, btn){
+  /* Update active tab */
+  document.querySelectorAll('.tTab').forEach(function(t){ t.classList.remove('tActive'); });
+  btn.classList.add('tActive');
+
+  /* Hide all, show selected */
+  ['eng','heb','grk','ara','lat'].forEach(function(l){
+    document.getElementById('tOut-'+l).classList.remove('tShow');
+  });
+  var el = document.getElementById('tOut-'+lang);
+  el.classList.add('tShow');
+
+  if(lang === 'eng') return;
+  if(el.innerHTML && el.innerHTML.indexOf('transLoading') === -1 && el.innerHTML.length > 10) return;
+
+  var isNT = NT_BOOKS.indexOf(currentBook) >= 0;
+
+  /* Aramaic */
+  if(lang === 'ara'){
+    el.innerHTML =
+      '<p style="font-family:serif">ܒܪܫܝܬ ܐܝܬܘܗܝ ܗܘܐ ܡܠܬܐ ܘܗܘ ܡܠܬܐ ܐܝܬܘܗܝ ܗܘܐ ܠܘܬ ܐܠܗܐ ܘܐܠܗܐ ܐܝܬܘܗܝ ܗܘܐ ܗܘ ܡܠܬܐ</p>'+
+      '<div class="transNote">📜 Peshitta — Ancient Syriac/Aramaic Bible used by early Eastern churches. Shown here is a representative Aramaic text. Full verse-by-verse Aramaic requires a scholarly database.</div>';
+    return;
+  }
+
+  /* Hebrew — OT only */
+  if(lang === 'heb' && isNT){
+    el.innerHTML = '<div class="transNote">📜 Hebrew (WLC) is available for Old Testament books only. The New Testament was originally written in Greek — please select a Greek tab for NT books.</div>';
+    return;
+  }
+
+  /* Greek — NT only */
+  if(lang === 'grk' && !isNT){
+    el.innerHTML = '<div class="transNote">🔤 Greek (Textus Receptus) is available for New Testament books only. The Old Testament was originally written in Hebrew — please select the Hebrew tab for OT books.</div>';
+    return;
+  }
+
+  el.innerHTML = '<span class="transLoading">✦ Loading '+getLangName(lang)+'…</span>';
+
+  var apiVer = lang === 'heb' ? 'wlc' : lang === 'grk' ? 'rgreek' : 'vulgate';
+
+  fetch('https://bible-api.com/'+currentBook+'+'+currentChapter+'?translation='+apiVer)
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.error || !d.verses){
+        el.innerHTML = '<div class="transNote">Could not load '+getLangName(lang)+' for this passage. Try a different chapter.</div>';
+        return;
+      }
+      var txt = d.verses.map(function(v){
+        return '<sup class="vn">'+v.verse+'</sup>'+v.text+' ';
+      }).join('');
+      el.innerHTML = txt + '<div class="transNote">'+getLangNote(lang)+'</div>';
+    })
+    .catch(function(){
+      el.innerHTML = '<div class="transNote">Could not load. Please check your internet connection.</div>';
+    });
+}
+
+function getLangName(l){
+  return {heb:'Hebrew',grk:'Greek',lat:'Latin Vulgate',ara:'Aramaic'}[l] || l;
+}
+function getLangNote(l){
+  return {
+    heb: '📜 Hebrew — Westminster Leningrad Codex (WLC). The original language of the Old Testament.',
+    grk: '🔤 Greek — Textus Receptus. The original language of the New Testament.',
+    lat: '✝ Latin Vulgate — Jerome\'s 4th-century translation, used by the Church for over 1,000 years.',
+    ara: '📜 Aramaic Peshitta — Ancient Syriac version used by early Eastern churches.'
+  }[l] || '';
+}
+
+</script>
 </body>
 </html>
