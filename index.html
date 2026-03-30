@@ -532,6 +532,21 @@ footer a{color:var(--G3);text-decoration:none}
       <div class="bOut" id="bOut"><span class="bh">✦ Select a book and chapter, then press Read…</span></div>
     </div>
   </div>
+  <div class="transWrap" id="transWrap">
+  <div class="transLabel">✦ View in Another Language</div>
+  <div class="transTabs">
+    <button class="tTab eng tActive" onclick="showTrans('eng',this)">🇬🇧 English</button>
+    <button class="tTab" onclick="showTrans('heb',this)">🔤 Hebrew</button>
+    <button class="tTab" onclick="showTrans('grk',this)">🔤 Greek</button>
+    <button class="tTab" onclick="showTrans('ara',this)">🔤 Aramaic</button>
+    <button class="tTab" onclick="showTrans('lat',this)">✝ Latin</button>
+  </div>
+  <div class="transOut tShow" id="tOut-eng"></div>
+  <div class="transOut rtl"   id="tOut-heb"></div>
+  <div class="transOut"       id="tOut-grk"></div>
+  <div class="transOut rtl"   id="tOut-ara"></div>
+  <div class="transOut italic" id="tOut-lat"></div>
+</div>
 </section>
 
 <section class="quizSec" id="quiz">
