@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Daily Verse Card Generator — ELYMAS DIGITAL HUB</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=EB+Garamond:ital,wght@1,400;1,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Nunito',sans-serif;
+  background:#0B0020;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;
+  padding:2rem 1rem;
+  color:#FAE080;
+}
+
+h1{
+  font-family:'Cinzel',serif;
+  font-size:1.3rem;font-weight:700;
+  background:linear-gradient(90deg,#C9A227,#E8C040,#FAE080);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:.3rem;text-align:center;
+}
+.subtitle{font-size:.8rem;color:rgba(255,255,255,.45);margin-bottom:2rem;text-align:center;letter-spacing:.1em}
+
+/* CONTROLS */
+.controls{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(201,162,39,.3);
+  border-radius:12px;padding:1.5rem;
+  width:100%;max-width:500px;
+  margin-bottom:2rem;
+}
+.ctrl-label{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#C9A227;font-weight:700;margin-bottom:.6rem}
+.ctrl-row{margin-bottom:1.2rem}
+.ctrl-row:last-child{margin-bottom:0}
+
+select, input[type="number"]{
+  width:100%;padding:.7rem 1rem;
+  background:rgba(255,255,255,.07);
+  border:1.5px solid rgba(201,162,39,.3);
+  border-radius:6px;color:#FAE080;
+  font-family:'Nunito',sans-serif;font-size:.9rem;
+  outline:none;appearance:none;
+  transition:border-color .2s;
+}
+select:focus, input:focus{border-color:#C9A227}
+select option{background:#14003A;color:#FAE080}
+
+.lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.lang-chk{
+  display:flex;align-items:center;gap:.4rem;
+  background:rgba(255,255,255,.05);border:1.5px solid rgba(201,162,39,.2);
+  border-radius:6px;padding:.45rem .7rem;cursor:pointer;
+  font-size:.75rem;font-weight:600;color:rgba(255,255,255,.7);
+  transition:all .2s;user-select:none;
+}
+.lang-chk input{display:none}
+.lang-chk.checked{background:rgba(201,162,39,.2);border-color:#C9A227;color:#E8C040}
+
+.gen-btn{
+  width:100%;padding:1rem;
+  background:linear-gradient(135deg,#8B6914,#C9A227,#E8C040);
+  color:#14003A;border:none;border-radius:8px;
+  font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+  box-shadow:0 6px 24px rgba(201,162,39,.45);
+  transition:transform .2s,box-shadow .2s;
+  margin-top:1.2rem;
+}
+.gen-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(201,162,39,.6)}
+
+/* CANVAS PREVIEW */
+.canvas-wrap{
+  width:100%;max-width:500px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(201,162,39,.25);
+  border-radius:12px;padding:1rem;
+  margin-bottom:1.5rem;
+  display:none;
+}
+.canvas-wrap.show{display:block}
+canvas{
+  width:100%;height:auto;
+  border-radius:8px;
+  display:block;
+}
+
+/* DOWNLOAD BTN */
+.dl-btn{
+  width:100%;max-width:500px;
+  padding:1rem;
+  background:linear-gradient(135deg,#4B0082,#7B2FBE);
+  color:#fff;border:none;border-radius:8px;
+  font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+  box-shadow:0 6px 24px rgba(75,0,130,.45);
+  transition:transform .2s;
+  display:none;margin-bottom:1rem;
+}
+.dl-btn.show{display:block}
+.dl-btn:hover{transform:translateY(-2px)}
+
+.share-tip{
+  width:100%;max-width:500px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(201,162,39,.2);
+  border-radius:10px;padding:1.2rem;font-size:.82rem;
+  color:rgba(255,255,255,.6);line-height:1.7;text-align:center;
+  display:none;
+}
+.share-tip.show{display:block}
+.share-tip strong{color:#E8C040}
+</style>
+</head>
+<body>
+
+<h1>✦ ELYMAS DIGITAL HUB</h1>
+<div class="subtitle">Daily Bible Verse Card Generator</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+
+  <div class="ctrl-row">
+    <div class="ctrl-label">Choose Verse</div>
+    <select id="verseSelect">
+      <option value="auto">📅 Today's Auto Verse</option>
+      <option value="0">Jeremiah 29:11</option>
+      <option value="1">Philippians 4:13</option>
+      <option value="2">Psalm 23:1</option>
+      <option value="3">Proverbs 3:5</option>
+      <option value="4">Joshua 1:9</option>
+      <option value="5">John 3:16</option>
+      <option value="6">Psalm 27:1</option>
+    </select>
+  </div>
+
+  <div class="ctrl-row">
+    <div class="ctrl-label">Card Style</div>
+    <select id="styleSelect">
+      <option value="purple">🟣 Royal Purple &amp; Gold</option>
+      <option value="dark">⚫ Deep Dark &amp; Gold</option>
+      <option value="dawn">🌅 Purple Dawn</option>
+    </select>
+  </div>
+
+  <div class="ctrl-row">
+    <div class="ctrl-label">Show Languages on Card</div>
+    <div class="lang-grid">
+      <label class="lang-chk checked" id="lbl-heb">
+        <input type="checkbox" id="chk-heb" checked/> 🔤 Hebrew
+      </label>
+      <label class="lang-chk checked" id="lbl-grk">
+        <input type="checkbox" id="chk-grk" checked/> 🔤 Greek
+      </label>
+      <label class="lang-chk checked" id="lbl-ara">
+        <input type="checkbox" id="chk-ara" checked/> 🔤 Aramaic
+      </label>
+      <label class="lang-chk checked" id="lbl-lat">
+        <input type="checkbox" id="chk-lat" checked/> ✝ Latin
+      </label>
+    </div>
+  </div>
+
+  <button class="gen-btn" onclick="generateCard()">✦ Generate Verse Card</button>
+</div>
+
+<!-- PREVIEW -->
+<div class="canvas-wrap" id="canvasWrap">
+  <canvas id="verseCanvas"></canvas>
+</div>
+
+<button class="dl-btn" id="dlBtn" onclick="downloadCard()">⬇ Save Image to Phone</button>
+
+<div class="share-tip" id="shareTip">
+  <strong>✅ Image saved!</strong><br/>
+  Open your <strong>Gallery / Photos</strong> app → find the image →
+  tap <strong>Share</strong> → choose <strong>WhatsApp Status</strong> or
+  <strong>Instagram Story</strong>.<br/><br/>
+  🙏 Share the Word of God every day!
+</div>
+
+<script>
+/* ── VERSE DATA ── */
+var VERSES = [
+  {
+    eng:'"For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future."',
+    ref:'Jeremiah 29:11',
+    heb:'כִּי אָנֹכִי יָדַעְתִּי אֶת-הַמַּחֲשָׁבֹות אֲשֶׁר אָנֹכִי חֹשֵׁב עֲלֵיכֶם נְאֻם-יְהוָה',
+    grk:'ἐγὼ γὰρ οἶδα τοὺς λογισμούς, οὓς ἐγὼ λογίζομαι ἐφ᾽ ὑμᾶς, λέγει Κύριος.',
+    ara:'ܡܛܠ ܕܐܢܐ ܝܕܥ ܐܢܐ ܡܚܫܒܬܐ ܕܡܬܚܫܒ ܐܢܐ ܥܠܝܟܘܢ ܐܡܪ ܡܪܝܐ',
+    lat:'Ego enim scio cogitationes quas cogito super vos, ait Dominus, cogitationes pacis.'
+  },
+  {
+    eng:'"I can do all things through Christ who strengthens me."',
+    ref:'Philippians 4:13',
+    heb:'הַכֹּל אֲנִי יָכֹול בְּמָשִׁיחַ הַמְחַזְּקֵנִי',
+    grk:'πάντα ἰσχύω ἐν τῷ ἐνδυναμοῦντί με Χριστῷ.',
+    ara:'ܟܠ ܡܕܡ ܡܨܐ ܐܢܐ ܒܡܫܝܚܐ ܗܘ ܕܡܚܝܠ ܠܝ',
+    lat:'Omnia possum in eo qui me confortat.'
+  },
+  {
+    eng:'"The Lord is my shepherd; I shall not want."',
+    ref:'Psalm 23:1',
+    heb:'יְהוָה רֹעִי לֹא אֶחְסָר',
+    grk:'Κύριος ποιμαίνει με, καὶ οὐδέν με ὑστερήσει.',
+    ara:'ܡܪܝܐ ܪܥܐ ܠܝ ܘܡܕܡ ܠܐ ܡܚܣܪ ܠܝ',
+    lat:'Dominus regit me, et nihil mihi deerit.'
+  },
+  {
+    eng:'"Trust in the Lord with all your heart and lean not on your own understanding."',
+    ref:'Proverbs 3:5',
+    heb:'בְּטַח אֶל-יְהוָה בְּכָל-לִבֶּךָ וְאֶל-בִּינָתְךָ אַל-תִּשָּׁעֵן',
+    grk:'πεποιθὼς ἴσθι ἐν ὅλῃ καρδίᾳ σου ἐπὶ τῷ Θεῷ.',
+    ara:'ܬܟܠ ܥܠ ܡܪܝܐ ܒܟܠܗ ܠܒܟ ܘܥܠ ܒܝܢܬܟ ܠܐ ܬܣܬܡܟ',
+    lat:'Habe fiduciam in Domino ex toto corde tuo.'
+  },
+  {
+    eng:'"Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go."',
+    ref:'Joshua 1:9',
+    heb:'חֲזַק וֶאֱמָץ אַל-תַּעֲרֹץ וְאַל-תֵּחָת כִּי עִמְּךָ יְהוָה אֱלֹהֶיךָ',
+    grk:'ἰσχύε καὶ ἀνδρίζου, μὴ δειλιάσῃς μηδὲ φοβηθῇς.',
+    ara:'ܐܬܚܝܠ ܘܐܬܐܡܨ ܠܐ ܬܕܚܠ ܘܠܐ ܬܬܬܒܪ ܡܛܠ ܕܥܡܟ ܡܪܝܐ',
+    lat:'Confortare et esto robustus; noli metuere et noli timere.'
+  },
+  {
+    eng:'"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."',
+    ref:'John 3:16',
+    heb:'כִּי-כֵן אָהַב אֱלֹהִים אֶת-הָעוֹלָם עַד כִּי נָתַן אֶת-בְּנוֹ אֶת-יְחִידוֹ',
+    grk:'οὕτω γὰρ ἠγάπησεν ὁ Θεὸς τὸν κόσμον, ὥστε τὸν υἱὸν αὐτοῦ τὸν μονογενῆ ἔδωκεν.',
+    ara:'ܗܟܢܐ ܓܝܪ ܐܚܒ ܐܠܗܐ ܠܥܠܡܐ ܐܝܟܢܐ ܕܠܒܪܗ ܝܚܝܕܝܐ ܢܬܠ',
+    lat:'Sic enim dilexit Deus mundum ut Filium suum unigenitum daret.'
+  },
+  {
+    eng:'"The Lord is my light and my salvation — whom shall I fear?"',
+    ref:'Psalm 27:1',
+    heb:'יְהוָה אוֹרִי וְיִשְׁעִי מִמִּי אִירָא',
+    grk:'Κύριος φωτισμός μου καὶ σωτήρ μου, τίνα φοβηθήσομαι;',
+    ara:'ܡܪܝܐ ܢܘܗܪܝ ܘܦܪܘܩܝ ܡܢ ܕܚܠ',
+    lat:'Dominus illuminatio mea et salus mea, quem timebo?'
+  }
+];
+
+/* Toggle language checkboxes */
+document.querySelectorAll('.lang-chk').forEach(function(lbl){
+  lbl.addEventListener('click', function(){
+    var chk = lbl.querySelector('input');
+    chk.checked = !chk.checked;
+    lbl.classList.toggle('checked', chk.checked);
+  });
+});
+
+/* STYLES */
+var STYLES = {
+  purple:{
+    bg1:'#14003A', bg2:'#2E0060', bg3:'#4B0082',
+    accent:'#C9A227', accent2:'#E8C040', accent3:'#FAE080',
+    text:'#FFFFFF', subtext:'rgba(255,255,255,0.75)',
+    langBg:'rgba(255,255,255,0.07)', langBorder:'rgba(201,162,39,0.35)',
+    langTitle:'#E8C040', langText:'rgba(255,255,255,0.85)'
+  },
+  dark:{
+    bg1:'#050010', bg2:'#0D0025', bg3:'#1A003A',
+    accent:'#D4AF37', accent2:'#F0C040', accent3:'#FFE080',
+    text:'#FFFFFF', subtext:'rgba(255,255,255,0.72)',
+    langBg:'rgba(255,255,255,0.05)', langBorder:'rgba(212,175,55,0.3)',
+    langTitle:'#F0C040', langText:'rgba(255,255,255,0.82)'
+  },
+  dawn:{
+    bg1:'#1A0040', bg2:'#350070', bg3:'#6A10C0',
+    accent:'#FFD700', accent2:'#FFE040', accent3:'#FFF0A0',
+    text:'#FFFFFF', subtext:'rgba(255,255,255,0.78)',
+    langBg:'rgba(255,255,255,0.09)', langBorder:'rgba(255,215,0,0.35)',
+    langTitle:'#FFE040', langText:'rgba(255,255,255,0.88)'
+  }
+};
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight, rtl){
+  var words = text.split(' ');
+  var line = '';
+  var lines = [];
+  for(var i=0;i<words.length;i++){
+    var test = line + words[i] + ' ';
+    if(ctx.measureText(test).width > maxWidth && i > 0){
+      lines.push(line.trim());
+      line = words[i] + ' ';
+    } else {
+      line = test;
+    }
+  }
+  lines.push(line.trim());
+  for(var j=0;j<lines.length;j++){
+    if(rtl){
+      ctx.fillText(lines[j], x, y + j*lineHeight);
+    } else {
+      ctx.fillText(lines[j], x, y + j*lineHeight);
+    }
+  }
+  return lines.length;
+}
+
+function measureLines(ctx, text, maxWidth){
+  var words = text.split(' ');
+  var line = '';
+  var count = 0;
+  for(var i=0;i<words.length;i++){
+    var test = line + words[i] + ' ';
+    if(ctx.measureText(test).width > maxWidth && i > 0){
+      count++;
+      line = words[i] + ' ';
+    } else {
+      line = test;
+    }
+  }
+  return count + 1;
+}
+
+function generateCard(){
+  var verseIdx = document.getElementById('verseSelect').value;
+  var v = verseIdx === 'auto'
+    ? VERSES[new Date().getDay() % VERSES.length]
+    : VERSES[parseInt(verseIdx)];
+
+  var styleName = document.getElementById('styleSelect').value;
+  var S = STYLES[styleName];
+
+  var showHeb = document.getElementById('chk-heb').checked;
+  var showGrk = document.getElementById('chk-grk').checked;
+  var showAra = document.getElementById('chk-ara').checked;
+  var showLat = document.getElementById('chk-lat').checked;
+  var langs = [];
+  if(showHeb) langs.push({key:'heb', label:'Hebrew (עברית)', rtl:true,  text:v.heb});
+  if(showGrk) langs.push({key:'grk', label:'Greek (Ἑλληνικά)', rtl:false, text:v.grk});
+  if(showAra) langs.push({key:'ara', label:'Aramaic (ܐܪܡܝܐ)', rtl:true,  text:v.ara});
+  if(showLat) langs.push({key:'lat', label:'Latin (Vulgata)',   rtl:false, text:v.lat, italic:true});
+
+  /* Canvas size — portrait (WhatsApp story ratio 9:16) */
+  var W = 1080;
+  var canvas = document.getElementById('verseCanvas');
+  var ctx = canvas.getContext('2d');
+
+  /* First pass — measure height needed */
+  canvas.width = W;
+  canvas.height = 100; /* temp */
+  ctx.font = 'italic 44px Georgia, serif';
+  var engLines = measureLines(ctx, v.eng, W - 140);
+
+  var headerH = 220;
+  var engH = engLines * 62 + 40;
+  var refH = 70;
+  var divH = 40;
+  var langH = 0;
+  if(langs.length > 0){
+    ctx.font = '32px Arial, sans-serif';
+    langs.forEach(function(l){
+      var lh = measureLines(ctx, l.text, W - 180) * 46 + 90;
+      langH += lh;
+    });
+    langH += 60; /* "In Ancient Languages" title */
+  }
+  var footerH = 100;
+  var totalH = headerH + engH + refH + divH + langH + footerH + 60;
+
+  canvas.height = totalH;
+  canvas.width = W;
+
+  /* BACKGROUND gradient */
+  var grad = ctx.createLinearGradient(0, 0, W, totalH);
+  grad.addColorStop(0, S.bg1);
+  grad.addColorStop(0.4, S.bg2);
+  grad.addColorStop(0.75, S.bg3);
+  grad.addColorStop(1, S.bg1);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, totalH);
+
+  /* Radial glow top-left */
+  var glow1 = ctx.createRadialGradient(W*0.2, totalH*0.15, 0, W*0.2, totalH*0.15, W*0.6);
+  glow1.addColorStop(0, 'rgba(75,0,130,0.6)');
+  glow1.addColorStop(1, 'transparent');
+  ctx.fillStyle = glow1;
+  ctx.fillRect(0, 0, W, totalH);
+
+  /* Radial glow bottom-right */
+  var glow2 = ctx.createRadialGradient(W*0.8, totalH*0.8, 0, W*0.8, totalH*0.8, W*0.5);
+  glow2.addColorStop(0, 'rgba(123,47,190,0.4)');
+  glow2.addColorStop(1, 'transparent');
+  ctx.fillStyle = glow2;
+  ctx.fillRect(0, 0, W, totalH);
+
+  /* Gold top border line */
+  var topLine = ctx.createLinearGradient(0,0,W,0);
+  topLine.addColorStop(0,'transparent');
+  topLine.addColorStop(0.3, S.accent);
+  topLine.addColorStop(0.7, S.accent2);
+  topLine.addColorStop(1,'transparent');
+  ctx.fillStyle = topLine;
+  ctx.fillRect(0, 0, W, 5);
+
+  /* Gold bottom border line */
+  ctx.fillStyle = topLine;
+  ctx.fillRect(0, totalH-5, W, 5);
+
+  var y = 0;
+
+  /* ── HEADER ── */
+  y += 60;
+
+  /* Cross symbol */
+  ctx.font = 'bold 72px Georgia, serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.12)';
+  ctx.textAlign = 'center';
+  ctx.fillText('✝', W/2, y+20);
+
+  y += 30;
+
+  /* Site name */
+  ctx.font = 'bold 28px Cinzel, Georgia, serif';
+  var nameGrad = ctx.createLinearGradient(W*0.2, 0, W*0.8, 0);
+  nameGrad.addColorStop(0, S.accent);
+  nameGrad.addColorStop(0.5, S.accent2);
+  nameGrad.addColorStop(1, S.accent3);
+  ctx.fillStyle = nameGrad;
+  ctx.textAlign = 'center';
+  ctx.fillText('✦  ELYMAS DIGITAL HUB  ✦', W/2, y);
+
+  y += 36;
+
+  /* "Daily Scripture" label */
+  ctx.font = '600 20px Nunito, Arial, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.45)';
+  ctx.letterSpacing = '0.3em';
+  ctx.fillText('D A I L Y   S C R I P T U R E', W/2, y);
+
+  y += 44;
+
+  /* Gold divider line */
+  var divGrad = ctx.createLinearGradient(W*0.1, 0, W*0.9, 0);
+  divGrad.addColorStop(0, 'transparent');
+  divGrad.addColorStop(0.3, S.accent);
+  divGrad.addColorStop(0.7, S.accent2);
+  divGrad.addColorStop(1, 'transparent');
+  ctx.fillStyle = divGrad;
+  ctx.fillRect(W*0.15, y, W*0.7, 2);
+  y += 30;
+
+  /* ── ENGLISH VERSE ── */
+  ctx.font = 'italic 44px Georgia, "EB Garamond", serif';
+  ctx.fillStyle = S.text;
+  ctx.textAlign = 'center';
+  var engLinesCount = wrapText(ctx, v.eng, W/2, y, W-140, 62, false);
+  y += engLinesCount * 62 + 20;
+
+  /* Reference */
+  ctx.font = 'bold 32px Cinzel, Georgia, serif';
+  var refGrad = ctx.createLinearGradient(W*0.3, 0, W*0.7, 0);
+  refGrad.addColorStop(0, S.accent);
+  refGrad.addColorStop(1, S.accent2);
+  ctx.fillStyle = refGrad;
+  ctx.textAlign = 'center';
+  ctx.fillText('— ' + v.ref, W/2, y);
+  y += 60;
+
+  /* ── LANGUAGE TRANSLATIONS ── */
+  if(langs.length > 0){
+    /* Section title */
+    ctx.font = '600 22px Nunito, Arial, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.textAlign = 'center';
+    ctx.fillText('✦   T H I S   V E R S E   I N   A N C I E N T   L A N G U A G E S   ✦', W/2, y);
+    y += 50;
+
+    var pad = 70;
+    langs.forEach(function(l){
+      /* Measure height */
+      ctx.font = '32px Arial, sans-serif';
+      var lLines = measureLines(ctx, l.text, W - pad*2 - 40);
+      var cardH = lLines * 46 + 80;
+
+      /* Card background */
+      ctx.save();
+      ctx.beginPath();
+      var rx = pad, ry = y, rw = W - pad*2, rh = cardH, r = 16;
+      ctx.moveTo(rx+r, ry); ctx.lineTo(rx+rw-r, ry);
+      ctx.quadraticCurveTo(rx+rw, ry, rx+rw, ry+r);
+      ctx.lineTo(rx+rw, ry+rh-r);
+      ctx.quadraticCurveTo(rx+rw, ry+rh, rx+rw-r, ry+rh);
+      ctx.lineTo(rx+r, ry+rh);
+      ctx.quadraticCurveTo(rx, ry+rh, rx, ry+rh-r);
+      ctx.lineTo(rx, ry+r);
+      ctx.quadraticCurveTo(rx, ry, rx+r, ry);
+      ctx.closePath();
+      ctx.fillStyle = S.langBg;
+      ctx.fill();
+      /* Card border */
+      ctx.strokeStyle = S.langBorder;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.restore();
+
+      /* Left accent bar */
+      var barGrad = ctx.createLinearGradient(0, y, 0, y+cardH);
+      barGrad.addColorStop(0, S.accent);
+      barGrad.addColorStop(1, S.accent2);
+      ctx.fillStyle = barGrad;
+      ctx.beginPath();
+      ctx.roundRect(pad, y, 5, cardH, [16,0,0,16]);
+      ctx.fill();
+
+      /* Language label */
+      ctx.font = 'bold 20px Nunito, Arial, sans-serif';
+      ctx.fillStyle = S.langTitle;
+      ctx.textAlign = 'left';
+      ctx.fillText(l.label, pad + 28, y + 34);
+
+      /* Translation text */
+      var font = l.italic ? 'italic 32px Georgia, serif' : '32px Arial, sans-serif';
+      ctx.font = font;
+      ctx.fillStyle = S.langText;
+      if(l.rtl){
+        ctx.textAlign = 'right';
+        wrapText(ctx, l.text, W - pad - 24, y + 62, W - pad*2 - 40, 46, true);
+        ctx.textAlign = 'left';
+      } else {
+        ctx.textAlign = 'left';
+        wrapText(ctx, l.text, pad + 28, y + 62, W - pad*2 - 40, 46, false);
+      }
+
+      y += cardH + 20;
+    });
+  }
+
+  y += 20;
+
+  /* ── FOOTER ── */
+  ctx.font = '600 22px Nunito, Arial, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.textAlign = 'center';
+  ctx.fillText('www.kyeremehabass721-prog.github.io/Abas-', W/2, y + 30);
+  ctx.fillText('✝  Faith  ·  Purpose  ·  Excellence', W/2, y + 60);
+
+  /* Gold bottom line again inside */
+  ctx.fillStyle = divGrad;
+  ctx.fillRect(W*0.15, y+10, W*0.7, 2);
+
+  /* Show preview & download */
+  document.getElementById('canvasWrap').classList.add('show');
+  document.getElementById('dlBtn').classList.add('show');
+  document.getElementById('shareTip').classList.remove('show');
+}
+
+function downloadCard(){
+  var canvas = document.getElementById('verseCanvas');
+  var link = document.createElement('a');
+  var today = new Date();
+  var dateStr = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  link.download = 'ElymasVerse-' + dateStr + '.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+  setTimeout(function(){
+    document.getElementById('shareTip').classList.add('show');
+  }, 500);
+}
+</script>
+</body>
+</html>
