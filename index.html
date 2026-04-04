@@ -1165,6 +1165,55 @@ function getLangNote(l){
     ara: '📜 Aramaic Peshitta — Ancient Syriac version used by early Eastern churches.'
   }[l] || '';
 }
+/* ============================================
+   STEP 3A — Paste this BEFORE your </script> tag
+   (the closing script tag at the bottom of the file)
+   ============================================ */
+
+var VERSE_DATA=[
+  {eng:'"For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future."',ref:'— Jeremiah 29:11',heb:'כִּי אָנֹכִי יָדַעְתִּי אֶת-הַמַּחֲשָׁבֹות אֲשֶׁר אָנֹכִי חֹשֵׁב עֲלֵיכֶם נְאֻם-יְהוָה',grk:'ἐγὼ γὰρ οἶδα τοὺς λογισμούς, λέγει Κύριος, λογισμοὶ εἰρήνης.',ara:'ܡܛܠ ܕܐܢܐ ܝܕܥ ܐܢܐ ܡܚܫܒܬܐ ܕܡܬܚܫܒ ܐܢܐ ܥܠܝܟܘܢ ܐܡܪ ܡܪܝܐ',lat:'Ego enim scio cogitationes quas cogito super vos, ait Dominus.'},
+  {eng:'"I can do all things through Christ who strengthens me."',ref:'— Philippians 4:13',heb:'הַכֹּל אֲנִי יָכֹול בְּמָשִׁיחַ הַמְחַזְּקֵנִי',grk:'πάντα ἰσχύω ἐν τῷ ἐνδυναμοῦντί με Χριστῷ.',ara:'ܟܠ ܡܕܡ ܡܨܐ ܐܢܐ ܒܡܫܝܚܐ ܗܘ ܕܡܚܝܠ ܠܝ',lat:'Omnia possum in eo qui me confortat.'},
+  {eng:'"The Lord is my shepherd; I shall not want."',ref:'— Psalm 23:1',heb:'יְהוָה רֹעִי לֹא אֶחְסָר',grk:'Κύριος ποιμαίνει με, καὶ οὐδέν με ὑστερήσει.',ara:'ܡܪܝܐ ܪܥܐ ܠܝ ܘܡܕܡ ܠܐ ܡܚܣܪ ܠܝ',lat:'Dominus regit me, et nihil mihi deerit.'},
+  {eng:'"Trust in the Lord with all your heart and lean not on your own understanding."',ref:'— Proverbs 3:5',heb:'בְּטַח אֶל-יְהוָה בְּכָל-לִבֶּךָ וְאֶל-בִּינָתְךָ אַל-תִּשָּׁעֵן',grk:'πεποιθὼς ἴσθι ἐν ὅλῃ καρδίᾳ σου ἐπὶ τῷ Θεῷ.',ara:'ܬܟܠ ܥܠ ܡܪܝܐ ܒܟܠܗ ܠܒܟ ܘܥܠ ܒܝܢܬܟ ܠܐ ܬܣܬܡܟ',lat:'Habe fiduciam in Domino ex toto corde tuo.'},
+  {eng:'"Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go."',ref:'— Joshua 1:9',heb:'חֲזַק וֶאֱמָץ אַל-תַּעֲרֹץ וְאַל-תֵּחָת כִּי עִמְּךָ יְהוָה אֱלֹהֶיךָ',grk:'ἰσχύε καὶ ἀνδρίζου, μὴ δειλιάσῃς μηδὲ φοβηθῇς.',ara:'ܐܬܚܝܠ ܘܐܬܐܡܨ ܠܐ ܬܕܚܠ ܘܠܐ ܬܬܬܒܪ ܡܛܠ ܕܥܡܟ ܡܪܝܐ',lat:'Confortare et esto robustus; noli metuere.'},
+  {eng:'"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."',ref:'— John 3:16',heb:'כִּי-כֵן אָהַב אֱלֹהִים אֶת-הָעוֹלָם עַד כִּי נָתַן אֶת-בְּנוֹ אֶת-יְחִידוֹ',grk:'οὕτω γὰρ ἠγάπησεν ὁ Θεὸς τὸν κόσμον, ὥστε τὸν υἱὸν αὐτοῦ τὸν μονογενῆ ἔδωκεν.',ara:'ܗܟܢܐ ܓܝܪ ܐܚܒ ܐܠܗܐ ܠܥܠܡܐ ܐܝܟܢܐ ܕܠܒܪܗ ܝܚܝܕܝܐ ܢܬܠ',lat:'Sic enim dilexit Deus mundum ut Filium suum unigenitum daret.'},
+  {eng:'"The Lord is my light and my salvation — whom shall I fear?"',ref:'— Psalm 27:1',heb:'יְהוָה אוֹרִי וְיִשְׁעִי מִמִּי אִירָא',grk:'Κύριος φωτισμός μου καὶ σωτήρ μου, τίνα φοβηθήσομαι;',ara:'ܡܪܝܐ ܢܘܗܪܝ ܘܦܪܘܩܝ ܡܢ ܕܚܠ',lat:'Dominus illuminatio mea et salus mea, quem timebo?'}
+];
+
+function shareVerse(){
+  var v=VERSE_DATA[new Date().getDay()%VERSE_DATA.length];
+  document.getElementById('sc-verse').textContent=v.eng;
+  document.getElementById('sc-ref').textContent=v.ref;
+  document.getElementById('sc-heb').textContent=v.heb;
+  document.getElementById('sc-grk').textContent=v.grk;
+  document.getElementById('sc-ara').textContent=v.ara;
+  document.getElementById('sc-lat').textContent=v.lat;
+  document.getElementById('savingOverlay').classList.add('show');
+  setTimeout(function(){
+    if(typeof html2canvas==='undefined'){
+      document.getElementById('savingOverlay').classList.remove('show');
+      alert('Could not load. Check your internet and try again.');
+      return;
+    }
+    var card=document.getElementById('snapCard');
+    html2canvas(card,{
+      scale:3,
+      useCORS:true,
+      backgroundColor:'#14003A',
+      logging:false
+    }).then(function(canvas){
+      var a=document.createElement('a');
+      var d=new Date();
+      a.download='ElymasVerse-'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+'.png';
+      a.href=canvas.toDataURL('image/png');
+      a.click();
+      document.getElementById('savingOverlay').classList.remove('show');
+    }).catch(function(){
+      document.getElementById('savingOverlay').classList.remove('show');
+      alert('Could not save. Please take a screenshot of the verse instead.');
+    });
+  },400);
+}
 
 </script>
 </body>
