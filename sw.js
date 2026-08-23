@@ -1,12 +1,5 @@
 // Elymas Digital Hub — service worker
-// Strategy: always try the network first for the page itself, so the installed
-// app picks up new features immediately. Falls back to the saved copy only
-// when there's no internet connection. Static assets (icons, manifest) are
-// cached for speed but still refreshed in the background on every visit.
-
-// IMPORTANT: bump this version number every time index.html changes,
-// so old installed copies get replaced instead of stuck forever.
-const CACHE_NAME = 'elymas-hub-v11';
+const CACHE_NAME = 'elymas-hub-v12';
 const CORE_ASSETS = ['./index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -26,8 +19,6 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Network-first for the page itself (HTML navigations) — always get the
-  // latest version when online; only use the saved copy if offline.
   if (event.request.mode === 'navigate' || event.request.destination === 'document') {
     event.respondWith(
       fetch(event.request)
@@ -41,7 +32,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache-first (with background refresh) for everything else — icons, manifest, etc.
   event.respondWith(
     caches.match(event.request).then((cached) => {
       const fetchPromise = fetch(event.request)
