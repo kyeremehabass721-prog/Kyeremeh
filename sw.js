@@ -1,5 +1,5 @@
 // Elymas Digital Hub — service worker
-const CACHE_NAME = 'elymas-hub-v50';
+const CACHE_NAME = 'elymas-hub-v53';
 const CORE_ASSETS = ['./index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
